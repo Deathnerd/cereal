@@ -10,7 +10,7 @@ class JsonTokenTest {
     fun simpleTest() {
         val input = """{"key": 123}"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBrace(0),
@@ -29,7 +29,7 @@ class JsonTokenTest {
     fun escapedStringTest() {
         val input = """{"key": "Hello, \"World\""}"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBrace(0),
@@ -51,7 +51,7 @@ class JsonTokenTest {
     fun invalidTokensTest() {
         val input = """{"key": \"World"}"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBrace(0),
@@ -74,7 +74,7 @@ class JsonTokenTest {
     fun arrayTest() {
         val input = """["a", "b", "c"]"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBracket(0),
@@ -95,7 +95,7 @@ class JsonTokenTest {
     fun keywordsTest() {
         val input = """{"active": true, "deleted": false, "value": null}"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBrace(0),
@@ -122,7 +122,7 @@ class JsonTokenTest {
     fun numbersTest() {
         val input = """[123, -456, 3.14, -2.71, 0, 0.0]"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBracket(0),
@@ -149,7 +149,7 @@ class JsonTokenTest {
     fun whitespaceTest() {
         val input = """{  "key"  :  "value"  }"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBrace(0),
@@ -168,7 +168,7 @@ class JsonTokenTest {
     fun nestedStructureTest() {
         val input = """{"user": {"name": "Alice", "age": 30}}"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBrace(0),
@@ -195,7 +195,7 @@ class JsonTokenTest {
     fun emptyContainersTest() {
         val input = """{"empty_obj": {}, "empty_arr": []}"""
         val chars = CharacterStream(input)
-        val tokens = TokenStream(chars)
+        val tokens = JsonTokenStream(chars)
 
         val expectedTokens = listOf(
             JsonToken.LeftBrace(0),
@@ -219,7 +219,7 @@ class JsonTokenTest {
     @DisplayName("Peek returns token without consuming it")
     fun peekDoesNotConsume() {
         val stream = CharacterStream("""{"key": "value"}""")
-        val tokenStream = TokenStream(stream)
+        val tokenStream = JsonTokenStream(stream)
 
         // Multiple peeks return same token without advancing
         val peek1 = tokenStream.peek()
@@ -233,7 +233,7 @@ class JsonTokenTest {
     @DisplayName("Multiple peeks return same token")
     fun multiplePeeksReturnSame() {
         val stream = CharacterStream("""[1, 2, 3]""")
-        val tokenStream = TokenStream(stream)
+        val tokenStream = JsonTokenStream(stream)
 
         val peek1 = tokenStream.peek()
         val peek2 = tokenStream.peek()
@@ -248,7 +248,7 @@ class JsonTokenTest {
     @DisplayName("Peek caches token and multiple peeks return same")
     fun peekCachesToken() {
         val stream = CharacterStream("""{"x": 1}""")
-        val tokenStream = TokenStream(stream)
+        val tokenStream = JsonTokenStream(stream)
 
         // Peek caches first token (LeftBrace)
         val peeked1 = tokenStream.peek()
@@ -270,7 +270,7 @@ class JsonTokenTest {
     @DisplayName("Peek returns EOF for empty stream")
     fun peekReturnsEOFForEmptyStream() {
         val stream = CharacterStream("""""")
-        val tokenStream = TokenStream(stream)
+        val tokenStream = JsonTokenStream(stream)
 
         // Peek on empty stream should return EOF
         val peeked = tokenStream.peek()
@@ -285,7 +285,7 @@ class JsonTokenTest {
     @DisplayName("Peek sequence through entire token stream")
     fun peekSequenceThroughTokens() {
         val stream = CharacterStream("""[1, 2]""")
-        val tokenStream = TokenStream(stream)
+        val tokenStream = JsonTokenStream(stream)
 
         // Peek and verify each token type
         assertTrue(tokenStream.peek() is JsonToken.LeftBracket)
@@ -311,7 +311,7 @@ class JsonTokenTest {
     fun peekConsistencyWithToList() {
         val input = """[true, false, null]"""
         val stream1 = CharacterStream(input)
-        val tokenStream1 = TokenStream(stream1)
+        val tokenStream1 = JsonTokenStream(stream1)
 
         // Collect tokens using peek/next
         val peekedTokens = mutableListOf<JsonToken>()
@@ -324,7 +324,7 @@ class JsonTokenTest {
 
         // Collect tokens using toList
         val stream2 = CharacterStream(input)
-        val tokenStream2 = TokenStream(stream2)
+        val tokenStream2 = JsonTokenStream(stream2)
         val listedTokens = tokenStream2.toList()
 
         // Should match
@@ -338,7 +338,7 @@ class JsonTokenTest {
     @DisplayName("Peek with whitespace skipping")
     fun peekWithWhitespaceSkipping() {
         val stream = CharacterStream("""  {  "key"  }  """)
-        val tokenStream = TokenStream(stream)
+        val tokenStream = JsonTokenStream(stream)
 
         // First peek should skip whitespace and return LeftBrace
         val firstToken = tokenStream.peek()
@@ -352,7 +352,7 @@ class JsonTokenTest {
         assertTrue(secondToken is JsonToken.String)
     }
 
-    private fun assertTokens(tokens: TokenStream, expectedTokens: List<JsonToken>) {
+    private fun assertTokens(tokens: JsonTokenStream, expectedTokens: List<JsonToken>) {
         val actualTokens = tokens.toList()
 
         assertEquals(
