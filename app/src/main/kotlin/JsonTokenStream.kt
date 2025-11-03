@@ -6,46 +6,19 @@
  * structural tokens (braces, brackets, punctuation), literals (strings, numbers, keywords),
  * and whitespace skipping.
  *
+ * Inherits generic token sequencing behavior (next, peek, toList) from [AbstractTokenStream]
+ * and implements JSON-specific token parsing logic.
+ *
  * @param stream The underlying character stream to read from
  */
-class JsonTokenStream(private val stream: CharacterStream) {
+class JsonTokenStream(override val stream: CharacterStream) : AbstractTokenStream<CharacterStream, JsonToken>(stream) {
     /**
-     * The current token that has been peeked but not yet consumed.
+     * Determines whether the given token represents the end of the JSON stream.
      *
-     * This field caches the next token to be read, enabling the [peek] method
-     * to return the same token without re-parsing.
+     * @param token The token to check
+     * @return true if the token is [JsonToken.EOF], false otherwise
      */
-    private var currentToken: JsonToken? = null
-
-    /**
-     * Reads and returns the next token from the stream.
-     *
-     * This method advances the stream to the next token and returns it.
-     * The returned token is cached until the next call to [next].
-     *
-     * @return The next [JsonToken] in the stream
-     */
-    fun next(): JsonToken {
-        currentToken = readToken()
-        return currentToken!!
-    }
-
-    /**
-     * Returns the next token without consuming it.
-     *
-     * This method allows looking ahead to the next token without advancing the stream.
-     * The token is cached and will be returned by the next call to [next].
-     * Multiple calls to [peek] return the same token.
-     *
-     * @return The next [JsonToken] in the stream without consuming it
-     */
-    fun peek(): JsonToken {
-        if (currentToken == null) {
-            if(stream.eof) return JsonToken.EOF
-            currentToken = readToken()
-        }
-        return currentToken!!
-    }
+    override fun isTokenEOF(token: JsonToken): Boolean = token == JsonToken.EOF
 
     /**
      * Reads a single token from the character stream.
@@ -58,7 +31,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
      *
      * @return The next [JsonToken] parsed from the stream
      */
-    private fun readToken(): JsonToken {
+    override fun readToken(): JsonToken {
         skipWhitespace()
         if (stream.eof) return JsonToken.EOF
         return when (stream.current) {
@@ -83,7 +56,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
      */
     private fun readLeftBrace(): JsonToken.LeftBrace {
         val start = stream.index
-        stream.advance();
+        stream.advance()
         return JsonToken.LeftBrace(start)
     }
 
@@ -94,7 +67,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
      */
     private fun readRightBrace(): JsonToken.RightBrace {
         val start = stream.index
-        stream.advance();
+        stream.advance()
         return JsonToken.RightBrace(start)
     }
 
@@ -105,7 +78,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
      */
     private fun readLeftBracket(): JsonToken.LeftBracket {
         val start = stream.index
-        stream.advance();
+        stream.advance()
         return JsonToken.LeftBracket(start)
     }
 
@@ -116,7 +89,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
      */
     private fun readRightBracket(): JsonToken.RightBracket {
         val start = stream.index
-        stream.advance();
+        stream.advance()
         return JsonToken.RightBracket(start)
     }
 
@@ -127,7 +100,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
      */
     private fun readComma(): JsonToken.Comma {
         val start = stream.index
-        stream.advance();
+        stream.advance()
         return JsonToken.Comma(start)
     }
 
@@ -138,7 +111,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
      */
     private fun readColon(): JsonToken.Colon {
         val start = stream.index
-        stream.advance();
+        stream.advance()
         return JsonToken.Colon(start)
     }
 
@@ -199,7 +172,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
             var hasDecimal = stream.current == '.'
             addLast(stream.current)
             stream.advance()
-            while(!stream.eof && (isDigit(stream.current) || stream.current == '.')) {
+            while (!stream.eof && (isDigit(stream.current) || stream.current == '.')) {
                 if (stream.current == '.') {
                     if (hasDecimal) {
                         stream.error("Number has two decimal points")
@@ -232,7 +205,7 @@ class JsonTokenStream(private val stream: CharacterStream) {
                 if (stream.eof) {
                     stream.error("Unterminated string")
                 }
-                if(stream.current == '\\') {
+                if (stream.current == '\\') {
                     addLast(stream.current)
                     stream.advance()
                 }
@@ -258,19 +231,4 @@ class JsonTokenStream(private val stream: CharacterStream) {
         }
     }
 
-    /**
-     * Tokenizes the entire input stream and returns all tokens as a list.
-     *
-     * Repeatedly calls [next] until [JsonToken.EOF] is encountered,
-     * collecting all tokens into a mutable list. The EOF token is included in the list.
-     *
-     * @return A [List] containing all [JsonToken]s from the stream, ending with [JsonToken.EOF]
-     */
-    fun toList(): List<JsonToken> = mutableListOf<JsonToken>().apply {
-        while (true) {
-            val token = next()
-            add(token)
-            if(token == JsonToken.EOF) break
-        }
-    }
 }
