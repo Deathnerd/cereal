@@ -1,6 +1,6 @@
 // TODO: Consider removing values from tokens and just have the start indexes and their lengths?
 
-sealed class Token {
+sealed class JsonToken {
     abstract val startIndex: Int
     abstract val length: Int
 
@@ -9,7 +9,7 @@ sealed class Token {
         open val value: CharArray,
         final override val startIndex: Int,
         final override val length: Int
-    ) : Token() {
+    ) : JsonToken() {
         // Shared implementation - written once for all CharArray-backed tokens
         @ExcludeFromCoverage(reason = "Boilerplate equals implementation for CharArray-backed tokens")
         final override fun equals(other: Any?): Boolean =
@@ -42,35 +42,35 @@ sealed class Token {
         CharArrayBacked(value, startIndex, length)
 
     // Simple tokens stay as data classes
-    data class LeftBrace(override val startIndex: Int) : Token() {
+    data class LeftBrace(override val startIndex: Int) : JsonToken() {
         override val length = 1
     }
 
-    data class RightBrace(override val startIndex: Int) : Token() {
+    data class RightBrace(override val startIndex: Int) : JsonToken() {
         override val length = 1
     }
 
-    data class LeftBracket(override val startIndex: Int) : Token() {
+    data class LeftBracket(override val startIndex: Int) : JsonToken() {
         override val length = 1
     }
 
-    data class RightBracket(override val startIndex: Int) : Token() {
+    data class RightBracket(override val startIndex: Int) : JsonToken() {
         override val length = 1
     }
 
-    data class Comma(override val startIndex: Int) : Token() {
+    data class Comma(override val startIndex: Int) : JsonToken() {
         override val length = 1
     }
 
-    data class Colon(override val startIndex: Int) : Token() {
+    data class Colon(override val startIndex: Int) : JsonToken() {
         override val length = 1
     }
 
-    data class Invalid(val char: Char, override val startIndex: Int) : Token() {
+    data class Invalid(val char: Char, override val startIndex: Int) : JsonToken() {
         override val length = 1
     }
 
-    data object EOF : Token() {
+    data object EOF : JsonToken() {
         override val startIndex = -1
         override val length = -1
     }

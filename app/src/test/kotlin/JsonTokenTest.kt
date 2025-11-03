@@ -3,7 +3,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Assertions.*
 
 @DisplayName("Token Tokenizer Tests")
-class TokenTest {
+class JsonTokenTest {
 
     @Test
     @DisplayName("Simple key-value pair")
@@ -13,12 +13,12 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBrace(0),
-            Token.String("\"key\"".toCharArray(), 1, 5),
-            Token.Colon(6),
-            Token.Number("123".toCharArray(), 8, 3),
-            Token.RightBrace(11),
-            Token.EOF
+            JsonToken.LeftBrace(0),
+            JsonToken.String("\"key\"".toCharArray(), 1, 5),
+            JsonToken.Colon(6),
+            JsonToken.Number("123".toCharArray(), 8, 3),
+            JsonToken.RightBrace(11),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -32,15 +32,15 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBrace(0),
-            Token.String("\"key\"".toCharArray(), 1, 5),
-            Token.Colon(6),
-            Token.String(
+            JsonToken.LeftBrace(0),
+            JsonToken.String("\"key\"".toCharArray(), 1, 5),
+            JsonToken.Colon(6),
+            JsonToken.String(
                 charArrayOf('"', 'H', 'e', 'l', 'l', 'o', ',', ' ', '\\', '"', 'W', 'o', 'r', 'l', 'd', '\\', '"', '"'),
                 8, 18
             ),
-            Token.RightBrace(26),
-            Token.EOF
+            JsonToken.RightBrace(26),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -54,16 +54,16 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBrace(0),
-            Token.String("\"key\"".toCharArray(), 1, 5),
-            Token.Colon(6),
-            Token.Invalid('\\', 8),
-            Token.String(
+            JsonToken.LeftBrace(0),
+            JsonToken.String("\"key\"".toCharArray(), 1, 5),
+            JsonToken.Colon(6),
+            JsonToken.Invalid('\\', 8),
+            JsonToken.String(
                 charArrayOf('"', 'W', 'o', 'r', 'l', 'd', '"'),
                 9, 7
             ),
-            Token.RightBrace(16),
-            Token.EOF
+            JsonToken.RightBrace(16),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -77,14 +77,14 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBracket(0),
-            Token.String("\"a\"".toCharArray(), 1, 3),
-            Token.Comma(4),
-            Token.String("\"b\"".toCharArray(), 6, 3),
-            Token.Comma(9),
-            Token.String("\"c\"".toCharArray(), 11, 3),
-            Token.RightBracket(14),
-            Token.EOF
+            JsonToken.LeftBracket(0),
+            JsonToken.String("\"a\"".toCharArray(), 1, 3),
+            JsonToken.Comma(4),
+            JsonToken.String("\"b\"".toCharArray(), 6, 3),
+            JsonToken.Comma(9),
+            JsonToken.String("\"c\"".toCharArray(), 11, 3),
+            JsonToken.RightBracket(14),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -98,20 +98,20 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBrace(0),
-            Token.String("\"active\"".toCharArray(), 1, 8),
-            Token.Colon(9),
-            Token.Keyword("true".toCharArray(), 11, 4),
-            Token.Comma(15),
-            Token.String("\"deleted\"".toCharArray(), 17, 9),
-            Token.Colon(26),
-            Token.Keyword("false".toCharArray(), 28, 5),
-            Token.Comma(33),
-            Token.String("\"value\"".toCharArray(), 35, 7),
-            Token.Colon(42),
-            Token.Keyword("null".toCharArray(), 44, 4),
-            Token.RightBrace(48),
-            Token.EOF
+            JsonToken.LeftBrace(0),
+            JsonToken.String("\"active\"".toCharArray(), 1, 8),
+            JsonToken.Colon(9),
+            JsonToken.Keyword("true".toCharArray(), 11, 4),
+            JsonToken.Comma(15),
+            JsonToken.String("\"deleted\"".toCharArray(), 17, 9),
+            JsonToken.Colon(26),
+            JsonToken.Keyword("false".toCharArray(), 28, 5),
+            JsonToken.Comma(33),
+            JsonToken.String("\"value\"".toCharArray(), 35, 7),
+            JsonToken.Colon(42),
+            JsonToken.Keyword("null".toCharArray(), 44, 4),
+            JsonToken.RightBrace(48),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -125,20 +125,20 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBracket(0),
-            Token.Number("123".toCharArray(), 1, 3),
-            Token.Comma(4),
-            Token.Number("-456".toCharArray(), 6, 4),
-            Token.Comma(10),
-            Token.Number("3.14".toCharArray(), 12, 4),
-            Token.Comma(16),
-            Token.Number("-2.71".toCharArray(), 18, 5),
-            Token.Comma(23),
-            Token.Number("0".toCharArray(), 25, 1),
-            Token.Comma(26),
-            Token.Number("0.0".toCharArray(), 28, 3),
-            Token.RightBracket(31),
-            Token.EOF
+            JsonToken.LeftBracket(0),
+            JsonToken.Number("123".toCharArray(), 1, 3),
+            JsonToken.Comma(4),
+            JsonToken.Number("-456".toCharArray(), 6, 4),
+            JsonToken.Comma(10),
+            JsonToken.Number("3.14".toCharArray(), 12, 4),
+            JsonToken.Comma(16),
+            JsonToken.Number("-2.71".toCharArray(), 18, 5),
+            JsonToken.Comma(23),
+            JsonToken.Number("0".toCharArray(), 25, 1),
+            JsonToken.Comma(26),
+            JsonToken.Number("0.0".toCharArray(), 28, 3),
+            JsonToken.RightBracket(31),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -152,12 +152,12 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBrace(0),
-            Token.String("\"key\"".toCharArray(), 3, 5),
-            Token.Colon(10),
-            Token.String("\"value\"".toCharArray(), 13, 7),
-            Token.RightBrace(22),
-            Token.EOF
+            JsonToken.LeftBrace(0),
+            JsonToken.String("\"key\"".toCharArray(), 3, 5),
+            JsonToken.Colon(10),
+            JsonToken.String("\"value\"".toCharArray(), 13, 7),
+            JsonToken.RightBrace(22),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -171,20 +171,20 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBrace(0),
-            Token.String("\"user\"".toCharArray(), 1, 6),
-            Token.Colon(7),
-            Token.LeftBrace(9),
-            Token.String("\"name\"".toCharArray(), 10, 6),
-            Token.Colon(16),
-            Token.String("\"Alice\"".toCharArray(), 18, 7),
-            Token.Comma(25),
-            Token.String("\"age\"".toCharArray(), 27, 5),
-            Token.Colon(32),
-            Token.Number("30".toCharArray(), 34, 2),
-            Token.RightBrace(36),
-            Token.RightBrace(37),
-            Token.EOF
+            JsonToken.LeftBrace(0),
+            JsonToken.String("\"user\"".toCharArray(), 1, 6),
+            JsonToken.Colon(7),
+            JsonToken.LeftBrace(9),
+            JsonToken.String("\"name\"".toCharArray(), 10, 6),
+            JsonToken.Colon(16),
+            JsonToken.String("\"Alice\"".toCharArray(), 18, 7),
+            JsonToken.Comma(25),
+            JsonToken.String("\"age\"".toCharArray(), 27, 5),
+            JsonToken.Colon(32),
+            JsonToken.Number("30".toCharArray(), 34, 2),
+            JsonToken.RightBrace(36),
+            JsonToken.RightBrace(37),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -198,18 +198,18 @@ class TokenTest {
         val tokens = TokenStream(chars)
 
         val expectedTokens = listOf(
-            Token.LeftBrace(0),
-            Token.String("\"empty_obj\"".toCharArray(), 1, 11),
-            Token.Colon(12),
-            Token.LeftBrace(14),
-            Token.RightBrace(15),
-            Token.Comma(16),
-            Token.String("\"empty_arr\"".toCharArray(), 18, 11),
-            Token.Colon(29),
-            Token.LeftBracket(31),
-            Token.RightBracket(32),
-            Token.RightBrace(33),
-            Token.EOF
+            JsonToken.LeftBrace(0),
+            JsonToken.String("\"empty_obj\"".toCharArray(), 1, 11),
+            JsonToken.Colon(12),
+            JsonToken.LeftBrace(14),
+            JsonToken.RightBrace(15),
+            JsonToken.Comma(16),
+            JsonToken.String("\"empty_arr\"".toCharArray(), 18, 11),
+            JsonToken.Colon(29),
+            JsonToken.LeftBracket(31),
+            JsonToken.RightBracket(32),
+            JsonToken.RightBrace(33),
+            JsonToken.EOF
         )
 
         assertTokens(tokens, expectedTokens)
@@ -225,7 +225,7 @@ class TokenTest {
         val peek1 = tokenStream.peek()
         val peek2 = tokenStream.peek()
 
-        assertTrue(peek1 is Token.LeftBrace)
+        assertTrue(peek1 is JsonToken.LeftBrace)
         assertEquals(peek1, peek2, "Multiple peeks should return same token")
     }
 
@@ -239,7 +239,7 @@ class TokenTest {
         val peek2 = tokenStream.peek()
         val peek3 = tokenStream.peek()
 
-        assertTrue(peek1 is Token.LeftBracket)
+        assertTrue(peek1 is JsonToken.LeftBracket)
         assertEquals(peek1, peek2)
         assertEquals(peek2, peek3)
     }
@@ -254,12 +254,12 @@ class TokenTest {
         val peeked1 = tokenStream.peek()
         val peeked1Again = tokenStream.peek()
 
-        assertTrue(peeked1 is Token.LeftBrace)
+        assertTrue(peeked1 is JsonToken.LeftBrace)
         assertEquals(peeked1, peeked1Again, "Multiple peeks should return same cached token")
 
         // Next reads a new token (String)
         val next1 = tokenStream.next()
-        assertTrue(next1 is Token.String)
+        assertTrue(next1 is JsonToken.String)
 
         // Now peek returns the newly read token
         val peeked2 = tokenStream.peek()
@@ -274,11 +274,11 @@ class TokenTest {
 
         // Peek on empty stream should return EOF
         val peeked = tokenStream.peek()
-        assertEquals(Token.EOF, peeked)
+        assertEquals(JsonToken.EOF, peeked)
 
         // Multiple peeks should still return EOF
         val peeked2 = tokenStream.peek()
-        assertEquals(Token.EOF, peeked2)
+        assertEquals(JsonToken.EOF, peeked2)
     }
 
     @Test
@@ -288,22 +288,22 @@ class TokenTest {
         val tokenStream = TokenStream(stream)
 
         // Peek and verify each token type
-        assertTrue(tokenStream.peek() is Token.LeftBracket)
+        assertTrue(tokenStream.peek() is JsonToken.LeftBracket)
         tokenStream.next() // consume
 
-        assertTrue(tokenStream.peek() is Token.Number)
+        assertTrue(tokenStream.peek() is JsonToken.Number)
         tokenStream.next() // consume
 
-        assertTrue(tokenStream.peek() is Token.Comma)
+        assertTrue(tokenStream.peek() is JsonToken.Comma)
         tokenStream.next() // consume
 
-        assertTrue(tokenStream.peek() is Token.Number)
+        assertTrue(tokenStream.peek() is JsonToken.Number)
         tokenStream.next() // consume
 
-        assertTrue(tokenStream.peek() is Token.RightBracket)
+        assertTrue(tokenStream.peek() is JsonToken.RightBracket)
         tokenStream.next() // consume
 
-        assertEquals(Token.EOF, tokenStream.peek())
+        assertEquals(JsonToken.EOF, tokenStream.peek())
     }
 
     @Test
@@ -314,12 +314,12 @@ class TokenTest {
         val tokenStream1 = TokenStream(stream1)
 
         // Collect tokens using peek/next
-        val peekedTokens = mutableListOf<Token>()
+        val peekedTokens = mutableListOf<JsonToken>()
         while (true) {
             val token = tokenStream1.peek()
             peekedTokens.add(token)
             tokenStream1.next()
-            if (token == Token.EOF) break
+            if (token == JsonToken.EOF) break
         }
 
         // Collect tokens using toList
@@ -342,17 +342,17 @@ class TokenTest {
 
         // First peek should skip whitespace and return LeftBrace
         val firstToken = tokenStream.peek()
-        assertTrue(firstToken is Token.LeftBrace)
-        assertEquals(2, (firstToken as Token.LeftBrace).startIndex)
+        assertTrue(firstToken is JsonToken.LeftBrace)
+        assertEquals(2, (firstToken as JsonToken.LeftBrace).startIndex)
 
         tokenStream.next()
 
         // Next peek should skip whitespace and return String
         val secondToken = tokenStream.peek()
-        assertTrue(secondToken is Token.String)
+        assertTrue(secondToken is JsonToken.String)
     }
 
-    private fun assertTokens(tokens: TokenStream, expectedTokens: List<Token>) {
+    private fun assertTokens(tokens: TokenStream, expectedTokens: List<JsonToken>) {
         val actualTokens = tokens.toList()
 
         assertEquals(

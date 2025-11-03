@@ -1,22 +1,22 @@
 class TokenStream(private val stream: CharacterStream) {
-    private var currentToken: Token? = null
+    private var currentToken: JsonToken? = null
 
-    fun next(): Token {
+    fun next(): JsonToken {
         currentToken = readToken()
         return currentToken!!
     }
 
-    fun peek(): Token {
+    fun peek(): JsonToken {
         if (currentToken == null) {
-            if(stream.eof) return Token.EOF
+            if(stream.eof) return JsonToken.EOF
             currentToken = readToken()
         }
         return currentToken!!
     }
 
-    private fun readToken(): Token {
+    private fun readToken(): JsonToken {
         skipWhitespace()
-        if (stream.eof) return Token.EOF
+        if (stream.eof) return JsonToken.EOF
         return when (stream.current) {
             '{' -> readLeftBrace()
             '}' -> readRightBrace()
@@ -32,51 +32,51 @@ class TokenStream(private val stream: CharacterStream) {
         }
     }
 
-    private fun readLeftBrace(): Token.LeftBrace {
+    private fun readLeftBrace(): JsonToken.LeftBrace {
         val start = stream.index
         stream.advance();
-        return Token.LeftBrace(start)
+        return JsonToken.LeftBrace(start)
     }
 
-    private fun readRightBrace(): Token.RightBrace {
+    private fun readRightBrace(): JsonToken.RightBrace {
         val start = stream.index
         stream.advance();
-        return Token.RightBrace(start)
+        return JsonToken.RightBrace(start)
     }
 
-    private fun readLeftBracket(): Token.LeftBracket {
+    private fun readLeftBracket(): JsonToken.LeftBracket {
         val start = stream.index
         stream.advance();
-        return Token.LeftBracket(start)
+        return JsonToken.LeftBracket(start)
     }
 
-    private fun readRightBracket(): Token.RightBracket {
+    private fun readRightBracket(): JsonToken.RightBracket {
         val start = stream.index
         stream.advance();
-        return Token.RightBracket(start)
+        return JsonToken.RightBracket(start)
     }
 
-    private fun readComma(): Token.Comma {
+    private fun readComma(): JsonToken.Comma {
         val start = stream.index
         stream.advance();
-        return Token.Comma(start)
+        return JsonToken.Comma(start)
     }
 
-    private fun readColon(): Token.Colon {
+    private fun readColon(): JsonToken.Colon {
         val start = stream.index
         stream.advance();
-        return Token.Colon(start)
+        return JsonToken.Colon(start)
     }
 
-    private fun readInvalidCharacter(): Token.Invalid {
+    private fun readInvalidCharacter(): JsonToken.Invalid {
         // Just tokenize bad characters as invalid and we'll deal with them later
         val start = stream.index
         val char = stream.current
         stream.advance()
-        return Token.Invalid(char, start)
+        return JsonToken.Invalid(char, start)
     }
 
-    private fun readKeyword(): Token.Keyword {
+    private fun readKeyword(): JsonToken.Keyword {
         val start = stream.index
         val chars = buildCharArray {
             addLast(stream.current)
@@ -86,10 +86,10 @@ class TokenStream(private val stream: CharacterStream) {
                 stream.advance()
             }
         }
-        return Token.Keyword(chars, start, chars.size)
+        return JsonToken.Keyword(chars, start, chars.size)
     }
 
-    private fun readNumber(): Token.Number {
+    private fun readNumber(): JsonToken.Number {
         val start = stream.index
         val value = buildCharArray {
             var hasDecimal = stream.current == '.'
@@ -106,10 +106,10 @@ class TokenStream(private val stream: CharacterStream) {
                 stream.advance()
             }
         }
-        return Token.Number(value, start, value.size)
+        return JsonToken.Number(value, start, value.size)
     }
 
-    private fun readString(): Token.String {
+    private fun readString(): JsonToken.String {
         val start = stream.index
         val value = buildCharArray {
             addLast(stream.current)
@@ -129,7 +129,7 @@ class TokenStream(private val stream: CharacterStream) {
             stream.advance()
         }
 
-        return Token.String(value, start, value.size)
+        return JsonToken.String(value, start, value.size)
     }
 
     private fun skipWhitespace() {
@@ -138,11 +138,11 @@ class TokenStream(private val stream: CharacterStream) {
         }
     }
 
-    fun toList(): List<Token> = mutableListOf<Token>().apply {
+    fun toList(): List<JsonToken> = mutableListOf<JsonToken>().apply {
         while (true) {
             val token = next()
             add(token)
-            if(token == Token.EOF) break
+            if(token == JsonToken.EOF) break
         }
     }
 }
