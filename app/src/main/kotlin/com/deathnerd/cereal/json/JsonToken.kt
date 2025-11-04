@@ -92,7 +92,7 @@ sealed class JsonToken {
          * @return a string representation of this token
          */
         override fun toString() =
-            "${this::class.simpleName}(value=${value.concatToString()}, startIndex=${startIndex}, length=${length})"
+            "${this::class.simpleName ?: "JsonToken"}(value=${value.concatToString()}, startIndex=${startIndex}, length=${length})"
     }
 
     /**

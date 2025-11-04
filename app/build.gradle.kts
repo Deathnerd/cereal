@@ -35,3 +35,9 @@ application {
     // (Note that Kotlin compiles `App.kt` to a class with FQN `com.example.app.AppKt`.)
     mainClass = "com.deathnerd.app.AppKt"
 }
+
+tasks.named<dev.detekt.gradle.Detekt>("detekt").configure {
+    reports {
+        sarif.required.set(true)
+    }
+}

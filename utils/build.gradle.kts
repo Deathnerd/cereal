@@ -28,3 +28,9 @@ dependencies {
     testRuntimeOnly(libs.junitJupiterEngine)
     testRuntimeOnly(libs.junitPlatformLauncher)
 }
+
+tasks.named<dev.detekt.gradle.Detekt>("detekt").configure {
+    reports {
+        sarif.required.set(true)
+    }
+}

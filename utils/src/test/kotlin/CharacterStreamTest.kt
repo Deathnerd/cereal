@@ -307,9 +307,7 @@ class CharacterStreamTest {
         assertEquals(1, stream.line)
 
         // Advance 5 characters to reach the newline
-        for (i in 0 until 5) {
-            stream.advance()
-        }
+        (0 until 5).forEach { _ -> stream.advance() }
 
         assertEquals('\n', stream.current)
         assertEquals(1, stream.line) // Line still 1, we're AT the newline, not past it

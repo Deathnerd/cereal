@@ -35,6 +35,7 @@ abstract class AbstractTokenStream<T, R>(open val stream: T) {
      */
     fun next(): R {
         currentToken = readToken()
+        @Suppress("UnsafeCallOnNullableType")
         return currentToken!!
     }
 
@@ -51,6 +52,7 @@ abstract class AbstractTokenStream<T, R>(open val stream: T) {
         if (currentToken == null) {
             currentToken = readToken()
         }
+        @Suppress("UnsafeCallOnNullableType")
         return currentToken!!
     }
 

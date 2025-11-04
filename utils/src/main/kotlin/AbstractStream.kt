@@ -7,10 +7,8 @@
  * Type parameters:
  * - `T`: The source type (covariant in input) - the data being parsed
  * - `R`: The result/element type (covariant in output) - the parsed result
- *
- * @property source The source data to be parsed
  */
-abstract class AbstractStream<in T, out R>(private val source: T) {
+abstract class AbstractStream<in T, out R> {
     /**
      * Reads and returns the next element from the stream.
      *

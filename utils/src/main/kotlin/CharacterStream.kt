@@ -12,7 +12,7 @@
  *
  * @param source The input string to parse character by character
  */
-class CharacterStream(private val source: String) : AbstractStream<String, Char>(source) {
+class CharacterStream(private val source: String) : AbstractStream<String, Char>() {
     /**
      * The current position (index) in the input string.
      *
