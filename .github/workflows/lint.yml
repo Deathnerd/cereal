@@ -36,7 +36,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: build/reports/detekt/detekt.sarif
+          sarif_file: build/reports/detekt/merge.sarif
 
       - name: Comment on PR with lint results
         if: github.event_name == 'pull_request' && always()
@@ -44,15 +44,23 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const detektPath = 'build/reports/detekt/detekt.xml';
+            const detektPath = 'build/reports/detekt/merge.sarif';
 
             if (!fs.existsSync(detektPath)) {
               console.log('No detekt report found');
               return;
             }
 
-            const detektReport = fs.readFileSync(detektPath, 'utf8');
-            const issueCount = (detektReport.match(/<issue/g) || []).length;
+            const detektReport = JSON.parse(fs.readFileSync(detektPath, 'utf8'));
+            let issueCount = 0;
+
+            if (detektReport.runs && Array.isArray(detektReport.runs)) {
+              detektReport.runs.forEach(run => {
+                if (run.results && Array.isArray(run.results)) {
+                  issueCount += run.results.length;
+                }
+              });
+            }
 
             if (issueCount > 0) {
               github.rest.issues.createComment({
