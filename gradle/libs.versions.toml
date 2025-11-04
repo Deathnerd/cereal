@@ -9,7 +9,7 @@ kotlinxSerializationJSON = "1.9.0"
 kotlinxCoroutines = "1.10.2"
 junit = "5.10.3"
 junitPlatform = "1.10.3"
-detekt = "1.23.7"
+detekt = "2.0.0-alpha.1"
 
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -26,4 +26,4 @@ kotlinxEcosystem = ["kotlinxDatetime", "kotlinxSerialization", "kotlinxCoroutine
 
 [plugins]
 kotlinPluginSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }

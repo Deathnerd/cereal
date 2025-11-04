@@ -58,11 +58,15 @@ sealed class JsonToken {
          */
         @ExcludeFromCoverage(reason = "Boilerplate equals implementation for CharArray-backed tokens")
         final override fun equals(other: Any?): Boolean =
-            if (this === other) true
-            else if (other !is CharArrayBacked) false
-            else startIndex == other.startIndex &&
-                    length == other.length &&
-                    value.contentEquals(other.value)
+            if (this === other) {
+                true
+            } else if (other !is CharArrayBacked) {
+                false
+            } else {
+                startIndex == other.startIndex &&
+                        length == other.length &&
+                        value.contentEquals(other.value)
+            }
 
         /**
          * Computes the hash code for this token.

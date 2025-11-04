@@ -10,8 +10,6 @@ plugins {
     kotlin("jvm")
     // Apply JaCoCo for code coverage reporting
     jacoco
-    // Apply Detekt for Kotlin code linting
-    alias(libs.plugins.detekt)
 }
 
 kotlin {
@@ -31,13 +29,6 @@ tasks.withType<Test>().configureEach {
             TestLogEvent.SKIPPED
         )
     }
-}
-
-// Configure Detekt for Kotlin code linting
-detekt {
-    config.setFrom(rootProject.files(".github/detekt.yml"))
-    buildUponDefaultConfig = true
-    autoCorrect = false
 }
 
 // Add coverage report generation tasks

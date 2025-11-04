@@ -1,11 +1,10 @@
 import com.deathnerd.cereal.json.JsonToken
 import com.deathnerd.cereal.json.JsonTokenStream
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 
 @DisplayName("Token Tokenizer Tests")
 class JsonTokenTest {

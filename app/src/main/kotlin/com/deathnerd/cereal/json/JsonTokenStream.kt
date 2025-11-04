@@ -21,6 +21,7 @@ import isWhitespace
  *
  * @param stream The underlying character stream to read from
  */
+@Suppress("TooManyFunctions")
 class JsonTokenStream(override val stream: CharacterStream) : AbstractTokenStream<CharacterStream, JsonToken>(stream) {
     /**
      * Determines whether the given token represents the end of the JSON stream.

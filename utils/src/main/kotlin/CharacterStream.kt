@@ -37,6 +37,13 @@ class CharacterStream(private val source: String) : AbstractStream<String, Char>
     var line = 1
 
     /**
+     * Whether the stream has reached the end of input.
+     *
+     * @return true if [index] is at or beyond the length of the input, false otherwise
+     */
+    val eof: Boolean get() = index >= source.length
+
+    /**
      * The current character at the [index] position.
      *
      * Returns the character at the current position, or a null character ('\u0000') if EOF.
@@ -52,20 +59,13 @@ class CharacterStream(private val source: String) : AbstractStream<String, Char>
      * Throws an exception if already at EOF.
      *
      * @return The character at the new position
-     * @throws Exception if the stream is at EOF
+     * @throws EndOfStreamException if the stream is at EOF
      */
     override fun next(): Char {
         advance()
-        if (eof) throw Exception("End of input reached")
+        if (eof) throw EndOfStreamException("End of input reached")
         return current
     }
-
-    /**
-     * Whether the stream has reached the end of input.
-     *
-     * @return true if [index] is at or beyond the length of the input, false otherwise
-     */
-    val eof: Boolean get() = index >= source.length
 
     /**
      * Advances the stream position to the next character.
@@ -118,7 +118,7 @@ class CharacterStream(private val source: String) : AbstractStream<String, Char>
      * to help with debugging and error reporting.
      *
      * @param message The error message describing what went wrong
-     * @throws Exception Always throws with the error details
+     * @throws StreamError Always throws with the error details
      */
-    override fun error(message: String): Nothing = throw Exception("Error at index $index: $message")
+    override fun error(message: String): Nothing = throw StreamError("Error at index $index: $message")
 }

@@ -1,6 +1,8 @@
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName("CharacterStream Tests")
@@ -343,7 +345,12 @@ class CharacterStreamTest {
     @Test
     @DisplayName("Consecutive newlines increment line counter")
     fun consecutiveNewlines() {
-        val stream = CharacterStream("a\n\n\nb")
+        val stream = CharacterStream(
+            """a
+
+
+b"""
+        )
 
         assertEquals(1, stream.line)
         assertEquals('a', stream.current)

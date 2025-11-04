@@ -5,6 +5,19 @@ plugins {
 
     // Apply the Application plugin to add support for building an executable JVM application.
     application
+    // Apply Detekt plugin from `gradle/libs.versions.toml` for Kotlin linting
+    alias(libs.plugins.detekt)
+}
+
+repositories {
+    mavenCentral()
+}
+
+// Configure Detekt for Kotlin code linting
+detekt {
+    config.setFrom(rootProject.files(".github/detekt.yml"))
+    buildUponDefaultConfig = true
+    autoCorrect = false
 }
 
 dependencies {
