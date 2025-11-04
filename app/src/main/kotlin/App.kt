@@ -1,3 +1,5 @@
+import com.deathnerd.cereal.json.JsonTokenStream
+
 @ExcludeFromCoverage("Testing app functionality, not logic")
 fun main(args: Array<String> = arrayOf()) {
     // Example usage: tokenize a simple JSON-like string

@@ -1,6 +1,11 @@
+import com.deathnerd.cereal.json.JsonToken
+import com.deathnerd.cereal.json.JsonTokenStream
+import org.intellij.lang.annotations.Language
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 
 @DisplayName("Token Tokenizer Tests")
 class JsonTokenTest {
@@ -8,6 +13,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Simple key-value pair")
     fun simpleTest() {
+        @Language("JSON")
         val input = """{"key": 123}"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -27,6 +33,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Escaped quotes in strings")
     fun escapedStringTest() {
+        @Language("JSON")
         val input = """{"key": "Hello, \"World\""}"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -35,10 +42,7 @@ class JsonTokenTest {
             JsonToken.LeftBrace(0),
             JsonToken.String("\"key\"".toCharArray(), 1, 5),
             JsonToken.Colon(6),
-            JsonToken.String(
-                charArrayOf('"', 'H', 'e', 'l', 'l', 'o', ',', ' ', '\\', '"', 'W', 'o', 'r', 'l', 'd', '\\', '"', '"'),
-                8, 18
-            ),
+            JsonToken.String(""""Hello, \"World\""""".toCharArray(), 8, 18),
             JsonToken.RightBrace(26),
             JsonToken.EOF
         )
@@ -72,6 +76,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Array with multiple string elements")
     fun arrayTest() {
+        @Language("JSON")
         val input = """["a", "b", "c"]"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -93,6 +98,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("All keywords: true, false, null")
     fun keywordsTest() {
+        @Language("JSON")
         val input = """{"active": true, "deleted": false, "value": null}"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -120,6 +126,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Various number formats: integers, decimals, negatives")
     fun numbersTest() {
+        @Language("JSON")
         val input = """[123, -456, 3.14, -2.71, 0, 0.0]"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -147,6 +154,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Whitespace handling (spaces around tokens)")
     fun whitespaceTest() {
+        @Language("JSON")
         val input = """{  "key"  :  "value"  }"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -166,6 +174,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Nested objects and arrays")
     fun nestedStructureTest() {
+        @Language("JSON")
         val input = """{"user": {"name": "Alice", "age": 30}}"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -193,6 +202,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Empty objects and arrays")
     fun emptyContainersTest() {
+        @Language("JSON")
         val input = """{"empty_obj": {}, "empty_arr": []}"""
         val chars = CharacterStream(input)
         val tokens = JsonTokenStream(chars)
@@ -218,6 +228,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Peek returns token without consuming it")
     fun peekDoesNotConsume() {
+        @Language("JSON")
         val stream = CharacterStream("""{"key": "value"}""")
         val tokenStream = JsonTokenStream(stream)
 
@@ -232,6 +243,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Multiple peeks return same token")
     fun multiplePeeksReturnSame() {
+        @Language("JSON")
         val stream = CharacterStream("""[1, 2, 3]""")
         val tokenStream = JsonTokenStream(stream)
 
@@ -247,6 +259,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Peek caches token and multiple peeks return same")
     fun peekCachesToken() {
+        @Language("JSON")
         val stream = CharacterStream("""{"x": 1}""")
         val tokenStream = JsonTokenStream(stream)
 
@@ -284,7 +297,9 @@ class JsonTokenTest {
     @Test
     @DisplayName("Peek sequence through entire token stream")
     fun peekSequenceThroughTokens() {
-        val stream = CharacterStream("""[1, 2]""")
+        @Language("JSON")
+        val input = """[1, 2]"""
+        val stream = CharacterStream(input)
         val tokenStream = JsonTokenStream(stream)
 
         // Peek and verify each token type
@@ -309,6 +324,7 @@ class JsonTokenTest {
     @Test
     @DisplayName("Peek consistency with toList")
     fun peekConsistencyWithToList() {
+        @Language("JSON")
         val input = """[true, false, null]"""
         val stream1 = CharacterStream(input)
         val tokenStream1 = JsonTokenStream(stream1)

@@ -1,3 +1,13 @@
+package com.deathnerd.cereal.json
+
+import AbstractTokenStream
+import CharacterStream
+import buildCharArray
+import isDigit
+import isLetter
+import isQuote
+import isWhitespace
+
 /**
  * A token stream that converts a character stream into a sequence of JSON tokens.
  *

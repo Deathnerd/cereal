@@ -1,3 +1,7 @@
+package com.deathnerd.cereal.json
+
+import ExcludeFromCoverage
+
 // TODO: Consider removing values from tokens and just have the start indexes and their lengths?
 
 /**
