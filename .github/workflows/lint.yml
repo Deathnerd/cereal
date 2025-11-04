@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Detekt
         continue-on-error: true
-        run: ./gradlew detekt
+        run: ./gradlew detekt reportMerge
 
       - name: Upload Detekt SARIF report
         uses: github/codeql-action/upload-sarif@v3
