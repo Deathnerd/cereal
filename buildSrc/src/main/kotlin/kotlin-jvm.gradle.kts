@@ -42,21 +42,6 @@ afterEvaluate {
             sourceDirectories.setFrom(files("src/main/kotlin", "src/main/java"))
             classDirectories.setFrom(files("${layout.buildDirectory.get()}/classes/kotlin/main"))
 
-            // Exclude classes and methods marked with @ExcludeFromCoverage
-            afterEvaluate {
-                classDirectories.setFrom(files(classDirectories.files.map { f ->
-                    fileTree(f) {
-                        // Exclude companion objects and synthetic methods
-                        exclude(
-                            "**/\$Companion.class",
-                            "**/*\$\$serializer.class",
-                            "**/WhenMappings.class",
-                            "**/*\$DefaultImpls.class"
-                        )
-                    }
-                }))
-            }
-
             reports {
                 xml.required.set(true)
                 html.required.set(true)
