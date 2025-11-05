@@ -4,19 +4,10 @@ plugins {
     id("buildsrc.convention.kotlin-jvm")
     // Apply Kotlin Serialization plugin from `gradle/libs.versions.toml`.
     alias(libs.plugins.kotlinPluginSerialization)
-    // Apply Detekt plugin from `gradle/libs.versions.toml` for Kotlin linting
-    alias(libs.plugins.detekt)
 }
 
 repositories {
     mavenCentral()
-}
-
-// Configure Detekt for Kotlin code linting
-detekt {
-    config.setFrom(rootProject.files(".github/detekt.yml"))
-    buildUponDefaultConfig = true
-    autoCorrect = false
 }
 
 dependencies {
@@ -27,10 +18,4 @@ dependencies {
     testImplementation(libs.junitJupiterApi)
     testRuntimeOnly(libs.junitJupiterEngine)
     testRuntimeOnly(libs.junitPlatformLauncher)
-}
-
-tasks.named<dev.detekt.gradle.Detekt>("detekt").configure {
-    reports {
-        sarif.required.set(true)
-    }
 }
