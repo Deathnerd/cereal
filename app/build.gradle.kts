@@ -5,19 +5,10 @@ plugins {
 
     // Apply the Application plugin to add support for building an executable JVM application.
     application
-    // Apply Detekt plugin from `gradle/libs.versions.toml` for Kotlin linting
-    alias(libs.plugins.detekt)
 }
 
 repositories {
     mavenCentral()
-}
-
-// Configure Detekt for Kotlin code linting
-detekt {
-    config.setFrom(rootProject.files(".github/detekt.yml"))
-    buildUponDefaultConfig = true
-    autoCorrect = false
 }
 
 dependencies {
@@ -34,10 +25,4 @@ application {
     // Define the Fully Qualified Name for the application main class
     // (Note that Kotlin compiles `App.kt` to a class with FQN `com.example.app.AppKt`.)
     mainClass = "com.deathnerd.app.AppKt"
-}
-
-tasks.named<dev.detekt.gradle.Detekt>("detekt").configure {
-    reports {
-        sarif.required.set(true)
-    }
 }
