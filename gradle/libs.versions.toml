@@ -6,19 +6,25 @@
 kotlin = "2.2.20"
 kotlinxDatetime = "0.7.1"
 kotlinxSerializationJSON = "1.9.0"
+kotlinxSerializationXml = "0.90.0"
 kotlinxCoroutines = "1.10.2"
 junit = "5.10.3"
 junitPlatform = "1.10.3"
 detekt = "2.0.0-alpha.1"
+clikt = "5.0.3"
+kotlinPoet = "2.0.0"
 
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinxSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJSON" }
+kotlinxSerializationXml = { module = "io.github.pdvrieze.xmlutil:serialization-jvm", version.ref = "kotlinxSerializationXml" }
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junitJupiterEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
+clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
+kotlinPoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinPoet" }
 
 # Libraries can be bundled together for easier import
 [bundles]
